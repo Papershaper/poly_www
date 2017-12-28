@@ -15,7 +15,7 @@ eventlet.monkey_patch()
 app = Flask(__name__)
 #app.config['SECRET'] = 'my secret key'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.config['MQTT_BROKER_URL'] = '127.0.0.1'
+app.config['MQTT_BROKER_URL'] = '127.0.0.1'  #update or config
 app.config['MQTT_BROKER_PORT'] = 1883
 #app.config['MQTT_USERNAME'] = ''
 #app.config['MQTT_PASSWORD'] = ''
@@ -36,6 +36,10 @@ bootstrap = Bootstrap(app)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/control')
+def control():
+    return render_template('polybot_control.html')
 
 @app.route("/status")
 def status_screen():

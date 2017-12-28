@@ -1,0 +1,131 @@
+<!--
+   polybot control
+-->
+
+{% extends "bootstrap/base.html" %}
+{% block title %}Polybot Control{% endblock %}
+
+{% block styles %}
+{{ super() }}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    var topic = 'polybot/command';
+    $('#FL').click(function(event) {
+      var distance = $('#distance').val()
+      var data = '{"topic": "'+topic+'", "message": "FL'+distance+'"}';
+      socket.emit('publish', data=data);
+    });
+    $('#FD').click(function(event) {
+      var distance = $('#distance').val()
+      var data = '{"topic": "'+topic+'", "message": "FD'+distance+'"}';
+      socket.emit('publish', data=data);
+    });
+    $('#FR').click(function(event) {
+      var distance = $('#distance').val()
+      var data = '{"topic": "'+topic+'", "message": "FR'+distance+'"}';
+      socket.emit('publish', data=data);
+    });
+    $('#RL').click(function(event) {
+      var distance = $('#distance').val()
+      var data = '{"topic": "'+topic+'", "message": "RL'+distance+'"}';
+      socket.emit('publish', data=data);
+    });
+    $('#RD').click(function(event) {
+      var distance = $('#distance').val()
+      var data = '{"topic": "'+topic+'", "message": "RD'+distance+'"}';
+      socket.emit('publish', data=data);
+    });
+    $('#RR').click(function(event) {
+      var distance = $('#distance').val()
+      var data = '{"topic": "'+topic+'", "message": "RR'+distance+'"}';
+      socket.emit('publish', data=data);
+    });
+    socket.on('mqtt_message', function(data) {
+      console.log(data);
+      var text = data['payload'];
+      var $textarea = $('#status_messages');
+      $textarea.val($textarea.val() + text + '\n');
+    })
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1>Polybot Control</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Direction Controls</h3>
+        </div>
+        <div class="panel-body">
+          <div class="col-xs-12">
+            <div class="row">
+              <div class="form-horizontal">
+                <div class="form-group">
+                  <div class="col-xs-12">
+                    <button id="FL" class="btn btn-primary">F-Left</button>
+                    <button id="FD" class="btn btn-primary">Forward</button>
+                    <button id="FR" class="btn btn-primary">F-Right</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-xs-12">
+                    <button id="RL" class="btn btn-primary">R-Left</button>
+                    <button id="RD" class="btn btn-primary">Reverse</button>
+                    <button id="RR" class="btn btn-primary">R-Right</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-xs-3">Distance: </label>
+                  <div class="col-xs-3">
+                    <input id="distance" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">View / Status</h3>
+        </div>
+        <div class="panel-body">
+          <div class="col-xs-12">
+            <div class="row">
+              <div class="form-horizontal">
+                <div class="form-group">
+				  <div class="col-xs-12">
+					<img class="img-responsive" src="{{url_for('static', filename='image.jpg')}}">
+				  </div>
+                </div>
+                <div class="form-group">
+                   <div class="col-xs-12">
+                    <textarea id="status_messages" class="form-control" rows=10></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
